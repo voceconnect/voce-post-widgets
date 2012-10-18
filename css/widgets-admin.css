@@ -1,0 +1,10 @@
+.column-1, .column-2, .column-3 { width: 31%; float: left; height: 300px; max-height: 300px; padding: 10px 10px 10px 0px; overflow: scroll; }
+.column-1, .column-2 { border-right: 2px dashed #CCC; } 
+.column-2, .column-3 { padding: 10px; }
+.column-2 .widgets-sortables { min-height: 0; background-color: transparent !important;}
+.column-3 .widget-top { cursor: pointer; }
+.column-3 .widget .active { color: #21759B;}
+#sidebar_admin .sidebar { padding-right: 10px;}
+#sidebar_admin .widget { margin-left: 0px !important;}
+#sidebar_admin .placeholder { border: 1px dashed #ddd; background-color: #efefef; height: 30px; margin-bottom: 12px; }
+#sidebar_admin p.description { height: 32px;}
