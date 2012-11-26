@@ -1,4 +1,4 @@
-/*global document, $, jQuery, ajaxurl*/
+/*global document, $, jQuery, ajaxurl, widgetsAdmin*/
 (function(document, $) {
 	"use strict";
 	var pageWidgets;
@@ -8,15 +8,17 @@
 		sidebarWidgets: {},
 		sidebar: '',
 		originalSidebar: '',
+		
 		/**
-	 * Handle all of the events
-	 */
+		* Handle all of the events
+		* @method init
+		*/
 		init : function init() {
 			var the_id, rem, $first;
 
 			pageWidgets.sidebarWidgets = $.parseJSON(widgetsAdmin.sidebars_widgets.replace(/&quot;/g, '"'));
 
-			// @todo: update hight as widgets are added / expanded
+			// @todo: update height as widgets are added / expanded
 			$('.sidebar').css('height', $('.column-1').height());
 
 			if($('.column-2 .description').size() === 0) { 
@@ -28,9 +30,6 @@
 			pageWidgets.sidebar = $first.closest('.widget').attr('id');
 			pageWidgets.originalSidebar = $first.closest('.widget').attr('data-sidebar');
 
-			/**
-		 *
-		 */
 			$('#sidebar_admin #widget-list, #sidebar_admin #sidebar-widget-list').children('.widget').draggable({
 				connectToSortable: '.sidebar',
 				handle: '> .widget-top > .widget-title',
@@ -51,18 +50,12 @@
 				}
 			});
 
-			/**
-		 *
-		 */
 			$('.column-2 .sidebar').droppable({
 				accept: '.widget',
 				drop: function(e, ui) {
 				}
 			});
 
-			/**
-		 *
-		 */
 			$('.column-2 .sidebar').sortable({
 				placeholder: 'placeholder',
 				items: '.widget',
@@ -101,34 +94,34 @@
 			});
 
 			/**
-		 * When the close link is clicked on a widget or a sidebar
-		 * hide the widget-inside element.
-		 */
+			* When the close link is clicked on a widget or a sidebar
+			* hide the widget-inside element.
+			*/
 			$('a.widget-control-close').live('click', function(e){
 				e.preventDefault();
 				pageWidgets.close($(this).closest('.widget'));
 			});
 
 			/**
-		 * When an avilable widget is clicked, show the description
-		 */
+			* When an avilable widget is clicked, show the description
+			*/
 			$('.column-1 .widget-action').live('click', function(e) {
 				e.preventDefault();
 				$('.widget-description', $(this).closest('.widget')).slideToggle();
 			});
 
 			/**
-		 * When the arrown on an active widget is clicked, show the form options
-		 */
+			* When the arrown on an active widget is clicked, show the form options
+			*/
 			$('.column-2 .widget-action').live('click', function(e) {
 				e.preventDefault();
 				$('.widget-inside', $(this).closest('.widget')).slideToggle();
 			});
 
 			/**
-		 * When the delete link is clicked on a widget, remove it from
-		 * the DOM and save the sidebar's state.
-		 */
+			* When the delete link is clicked on a widget, remove it from
+			* the DOM and save the sidebar's state.
+			*/
 			$('.column-2 .widget-control-remove').live('click', function(e) {
 				e.preventDefault();
 				pageWidgets.save($(this).closest('.widget'), 1, 1, 1);
@@ -136,19 +129,19 @@
 			});
 
 			/**
-		 * When the save button of an active widget is clicked, make an
-		 * AJAX request and save the form data.
-		 */
+			* When the save button of an active widget is clicked, make an
+			* AJAX request and save the form data.
+			*/
 			$('.column-2 .widget-control-save').live('click', function(e) {
 				e.preventDefault();
 				pageWidgets.save($(this).closest('.widget'), 0, 0, 0);
 			});
 
 			/**
-		 * When a sidebar is clicked set this objects sidebar and originalSidebar
-		 * attributes, and make an AJAX request to get the active widgets for that 
-		 * sidebar.
-		 */
+			* When a sidebar is clicked set this objects sidebar and originalSidebar
+			* attributes, and make an AJAX request to get the active widgets for that 
+			* sidebar.
+			*/
 			$('.column-3 .widget-top').live('click', function(e) {
 				e.preventDefault();
 				var a;
@@ -182,10 +175,10 @@
 					);
 			});
 
-		    /**
-	        * When the save button of a sidebar is clicked, do an AJAX request
-	        * and save the form data.
-	        */
+			/**
+			* When the save button of a sidebar is clicked, do an AJAX request
+			* and save the form data.
+			*/
 			$('.column-3 .widget-control-save').live('click', function(e) {
 				e.preventDefault();
 				var $widget, data, a;
@@ -210,6 +203,9 @@
 			});
 		},
 
+		/**
+		 *@method save
+		 */
 		save : function save(widget, del, animate, order) {
 			var data, a;
 			data = widget.find('.widget-inside :input').serialize();
@@ -253,14 +249,16 @@
 				pageWidgets.saveOrder();
 			}
 		},
-
+		
+		/**
+		* When calling the widgets-order AJAX action, you must post
+		* ALL of the sidebars and widgets, not just the one(s) you are
+		* updating.
+		* @method saveOrder
+		*/
 		saveOrder : function saveOrder() {
-			var a;
-			/**
-		 * When calling the widgets-order AJAX action, you must post
-		 * ALL of the sidebars and widgets, not just the one(s) you are
-		 * updating.
-		 */
+			var a, sidebar;
+		
 			a = {
 				action: 'widgets-order',
 				savewidgets: $('#_wpnonce_widgets').val()
@@ -283,7 +281,10 @@
 				}
 				);
 		},
-
+		
+		/**
+		 * @method close
+		 */
 		close : function close(widget) {
 			widget.children('.widget-inside').slideUp('fast', function(){
 				widget.css({
