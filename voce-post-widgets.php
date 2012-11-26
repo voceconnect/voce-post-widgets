@@ -4,7 +4,7 @@
   Plugin URI: https://github.com/voceconnect/voce-post-widgets
   Description: A better interface for managing your widgets.
   Author: johnciacia, markparolisi, voceplatforms
-  Version: 0.3
+  Version: 0.4
   Author URI: http://vocecommunications.com
  */
 
@@ -227,7 +227,7 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 		}
 
 		/**
-		 * Retreive sidebars and output HTML for metabox
+		 * Retrieve sidebars and output HTML for metabox
 		 * 
 		 * @global Object $post
 		 * @global Array $wp_registered_sidebars 
@@ -307,7 +307,7 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 		}
 
 		/**
-		 * Return the concated string of the sidebar ID
+		 * Return the concatenated string of the sidebar ID
 		 * 
 		 * @method get_sidebar_id
 		 * @param String $post_name

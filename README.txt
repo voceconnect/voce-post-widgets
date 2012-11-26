@@ -4,7 +4,7 @@ Donate link:
 Tags: widgets, sidebar
 Requires at least: 3.3
 Tested up to: 3.4
-Stable tag: .3
+Stable tag: .4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,10 +34,18 @@ Usage:
 By default, the Pages post type has the widget UI enabled. You can add custom post types by using the filter `voce_post_widgets_post_types`.
 
 Filters to set the default arguments for the sidebar:
+
 * `post_widgets_default_sidebar_args`
 * `post_widgets_default_sidebar_args-$sidebar`
 * `post_widgets_default_sidebar_args-$post_name`
 * `post_widgets_default_sidebar_args-$sidebar-$post_name`
+
+Admin UI:
+
+The first column shows all available widgets.
+The last column shows all of the registered sidebars.
+To add/edit/delete widgets in a sidebar, click on the sidebar name in the last (right) column.
+All active widgets appear in the center column and you can add new ones via drag and drop from the first (left) column and edit them as you normally would in the widgets screen by opening their options with a click on the widget name. 
 
 == Frequently asked questions ==
 
