@@ -4,7 +4,7 @@
   Plugin URI: https://github.com/voceconnect/voce-post-widgets
   Description: A better interface for managing your widgets.
   Author: johnciacia, markparolisi, voceplatforms
-  Version: 0.2
+  Version: 0.2.1
   Author URI: http://vocecommunications.com
  */
 
