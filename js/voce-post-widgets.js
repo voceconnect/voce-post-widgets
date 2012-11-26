@@ -17,7 +17,7 @@ pageWidgets = {
 		$('.sidebar').css('height', $('.column-1').height())
 
 		if($('.column-2 .description').size() == 0) { 
-			$('.column-2 .sidebar').html('<p class="description">Widgets in this area will be shown in the sidebar on the ' + widgetsAdmin.post_name + ' page.</p>') 
+			$('.column-2 .sidebar').html('<p class="description">Widgets in this area will be shown in the sidebar on the ' + widgetsAdmin.object_name + ' page.</p>') 
 		}
 
 		$first = $('.column-3 .widget :first');
@@ -167,7 +167,7 @@ pageWidgets = {
 				function(data) {
 					$('.column-2 .sidebar').html(data);
 					if($('.column-2 .description').size() == 0) { 
-						$('.column-2 .sidebar').html('<p class="description">Widgets in this area will be shown in the sidebar on the ' + widgetsAdmin.post_name + ' page.</p>') 
+						$('.column-2 .sidebar').html('<p class="description">Widgets in this area will be shown in the sidebar on the ' + widgetsAdmin.object_name + ' page.</p>') 
 					}
 				}
 			);
@@ -225,7 +225,7 @@ pageWidgets = {
 					action: 'register-sidebar',
 					sidebar: pageWidgets.sidebar,
 					original_sidebar: pageWidgets.originalSidebar,
-					post_name: widgetsAdmin.post_name
+					object_name: widgetsAdmin.object_name
 				},
 				function(data) {
 				}

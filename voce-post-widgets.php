@@ -8,7 +8,8 @@
   Author URI: http://vocecommunications.com
  */
 
-if ( !class_exists( 'Voce_Post_Widgets' ) ) {
+// @todo: refactor hook and filter names
+if ( ! class_exists( 'Voce_Post_Widgets' ) ) {
 
 	/**
 	 * 
@@ -26,17 +27,63 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 		 * @return Void 
 		 */
 		public static function setup() {
-			global $pagenow;
+
 			require_once( ABSPATH . '/wp-admin/includes/widgets.php' );
 			add_action( 'init', array( __CLASS__, 'init' ) );
 			add_action( 'wp_ajax_get-active-widgets', array( __CLASS__, 'ajax_get_active_widgets' ) );
 			add_action( 'wp_ajax_register-sidebar', array( __CLASS__, 'ajax_register_sidebar' ) );
 
-			if ( 'post.php' != $pagenow ) {
+			if( false === self::get_object() ) {
 				return;
 			}
+
 			add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
+
+			$default_taxonomies = apply_filters( 'post_widgets_default_taxonomies', array() );
+			foreach( $default_taxonomies as $taxonomy ) {
+				add_action( "{$taxonomy}_edit_form_fields", array( __CLASS__, 'edit_form_fields' ) );	
+			}
+			
 			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_enqueue_scripts' ) );
+		}
+
+		public static function edit_form_fields( $object ) {
+			?>
+			<tr class="form-field">
+				<td colspan="2">
+					<?php self::sidebar_admin_metabox(); ?>		
+				</td>
+			</tr>
+			<?php
+		}
+
+		/**
+		 *
+		 */
+		private static function get_object() {
+			global $pagenow, $taxonomy;
+
+			$object = new StdClass;
+
+			if( is_admin() ) {
+				switch( $pagenow ) {
+					case 'post.php':
+						global $post;
+						$object->name = empty( $post->post_name ) ?: $post->post_name;
+						break;
+					case 'edit-tags.php':
+						$object->name = $taxonomy;
+						break;
+					default:
+						return false;
+				}
+			} else {
+				// @todo check if we are on a taxonomy archive page
+				global $post;
+				$object->name = empty( $post->post_name ) ?: $post->post_name;
+			}
+
+			return $object;
 		}
 
 		/**
@@ -45,23 +92,24 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 		 * mapped to.
 		 * 
 		 * @method sidebars_widget
-		 * @global Object $post
 		 * @param Array $sidebars_widgets
 		 * @return Array new sidebar widgets
 		 */
 		public static function sidebars_widgets( $sidebars_widgets ) {
-			global $post;
-			if ( $post == NULL ) {
+			$object = self::get_object();
+
+			if( false === $object ) {
 				return $sidebars_widgets;
 			}
+
 			$sidebars = get_option( 'page_widgets', array( ) );
-			if ( $sidebars == "" ) {
+			if( $sidebars == '' ) {
 				return $sidebars_widgets;
 			}
 			$widgets = $sidebars_widgets;
 
-			foreach ($sidebars as $sidebar => $attrs) {
-				if ( strpos( $sidebar, self::WIDGET_ID_PREFIX . $post->post_name ) === 0 ) {
+			foreach( $sidebars as $sidebar => $attrs ) {
+				if( strpos( $sidebar, self::WIDGET_ID_PREFIX . $object->name ) === 0 ) {
 					$widgets[$attrs['original_sidebar']] = $sidebars_widgets[$sidebar];
 				}
 			}
@@ -76,11 +124,12 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 		 */
 		public static function init() {
 			// This filter must be called after the global post variable has been set.
-			if ( !is_admin() )
+			if ( ! is_admin() )
 				add_filter( 'sidebars_widgets', array( __CLASS__, 'sidebars_widgets' ) );
 
 			$sidebars = get_option( 'page_widgets', array( '' ) );
-			if ( $sidebars == "" )
+
+			if ( $sidebars == '' )
 				return;
 
 			$args = array(
@@ -92,19 +141,20 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 			);
 
 			$args = apply_filters( 'post_widgets_default_sidebar_args', $args );
-			foreach ($sidebars as $sidebar => $attrs) {
-				if ( !is_array( $attrs ) || empty( $attrs ) ) {
+			foreach( $sidebars as $sidebar => $attrs ) {
+				if( !is_array( $attrs ) || empty( $attrs ) ) {
 					return;
 				}
+
 				$args = apply_filters( 'post_widgets_default_sidebar_args-' . $attrs['original_sidebar'], $args );
-				$args = apply_filters( 'post_widgets_default_sidebar_args-' . $attrs['post_name'], $args );
-				$args = apply_filters( 'post_widgets_default_sidebar_args-' . $attrs['original_sidebar'] . '-' . $attrs['post_name'], $args );
+				$args = apply_filters( 'post_widgets_default_sidebar_args-' . $attrs['object_name'], $args );
+				$args = apply_filters( 'post_widgets_default_sidebar_args-' . $attrs['original_sidebar'] . '-' . $attrs['object_name'], $args );
 
 
 				register_sidebar( array(
-					'name' => $attrs['post_name'] . ' [' . $attrs['original_sidebar'] . ']',
+					'name' => $attrs['object_name'] . ' [' . $attrs['original_sidebar'] . ']',
 					'id' => $sidebar,
-					'description' => __( str_replace( '%1', $attrs['post_name'], $args['description'] ) ),
+					'description' => __( str_replace( '%1', $attrs['object_name'], $args['description'] ) ),
 					'before_title' => $args['before_title'],
 					'after_title' => $args['after_title'],
 					'before_widget' => $args['before_widget'],
@@ -145,19 +195,19 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 		 * Load plugin Javascript
 		 * 
 		 * @method admin_enqueue_scripts
-		 * @global Object $post
 		 * @return Void 
 		 */
 		public static function admin_enqueue_scripts() {
-			global $post;
 
-			wp_enqueue_style( 'widgets-admin-defaultb', get_admin_url() . '/css/widgets.css' );
+			$object = self::get_object();
+
+			wp_enqueue_style( 'widgets-admin-defaultb', get_admin_url() . 'css/widgets.css' );
 			wp_enqueue_style( 'widgets-admin', self::plugins_url( 'css/voce-post-widgets.css', __FILE__ ) );
 			wp_enqueue_script( 'widgets-admin', self::plugins_url( 'js/voce-post-widgets.js', __FILE__ ), array( 'jquery-ui-sortable', 'jquery-ui-draggable', 'jquery-ui-droppable' ), false, true );
 
 			// Get all of the sidebars and widgets. Used by the widgets-order AJAX call
 			$sidebars_widgets = get_option( 'sidebars_widgets', array( ) );
-			if ( $sidebars_widgets == "" )
+			if ( $sidebars_widgets == '' )
 				return;
 
 			foreach ($sidebars_widgets as $key => &$sidebar) {
@@ -169,7 +219,7 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 			}
 
 			$args = array(
-				'post_name' => $post->post_name,
+				'object_name' => $object->name,
 				'sidebars_widgets' => json_encode( $sidebars_widgets )
 			);
 			wp_localize_script( 'widgets-admin', 'widgetsAdmin', $args );
@@ -185,7 +235,7 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 			$post_types = apply_filters( 'post_widgets_post_types', array( 'page' ) );
 
 			foreach ($post_types as $post_type) {
-				add_meta_box( 'sidebar_admin', 'Sidebar Admin', array( __CLASS__, 'sidebar_admin_metabox' ), $post_type, 'advanced', 'high' );
+				add_meta_box( 'sidebar_admin', 'Sidebar Admin', array( __CLASS__, 'sidebar_admin_metabox' ), $post_type, 'normal', 'high' );
 			}
 		}
 
@@ -193,11 +243,10 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 		 * Generate HTML for meta box
 		 * 
 		 * @method sidebar_admin_metabox
-		 * @global Object $post 
 		 * @return Void
 		 */
 		public static function sidebar_admin_metabox() {
-			global $post;
+			$object = self::get_object();
 			?>
 
 			<div id="widget-list" class="column-1">
@@ -208,8 +257,8 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 
 			<div class="column-2">
 				<strong><?php _e( 'Active Widgets' ); ?></strong>
-				<div class="sidebar widget-droppable widget-list" id="<?php echo $post->post_name; ?>_0">
-					<?php self::get_active_widgets( self::get_sidebar_id( $post->post_name, 0 ) ); ?>
+				<div class="sidebar widget-droppable widget-list" id="<?php echo $object->name; ?>_0">
+					<?php self::get_active_widgets( self::get_sidebar_id( $object->name, 0 ) ); ?>
 				</div>
 			</div>
 
@@ -228,21 +277,21 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 
 		/**
 		 * Retreive sidebars and output HTML for metabox
-		 * 
-		 * @global Object $post
+		 *
 		 * @global Array $wp_registered_sidebars 
 		 * @return Void
 		 */
 		public static function get_sidebars() {
-			global $post, $wp_registered_sidebars;
+			global $wp_registered_sidebars;
+			$object = self::get_object();
 
 			$i = 0;
-			foreach ($wp_registered_sidebars as $sidebar) {
+			foreach( $wp_registered_sidebars as $sidebar ) {
 				// Ignore sidebars registered by this plugin.
-				if ( strpos( $sidebar['id'], self::WIDGET_ID_PREFIX ) === 0 )
+				if( strpos( $sidebar['id'], self::WIDGET_ID_PREFIX ) === 0 )
 					continue;
 				?>
-				<div class="widget" id="<?php echo self::get_sidebar_id( $post->post_name, $i ); ?>" data-sidebar="<?php echo $sidebar['id']; ?>">
+				<div class="widget" id="<?php echo self::get_sidebar_id( $object->name, $i ); ?>" data-sidebar="<?php echo $sidebar['id']; ?>">
 					<div class="widget-top">
 						<div class="widget-title-action">
 							<a class="widget-action hide-if-no-js" href="#available-widgets"></a>
@@ -299,7 +348,7 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 
 			$sidebars[$_POST['sidebar']] = array(
 				'original_sidebar' => $_POST['original_sidebar'],
-				'post_name' => $_POST['post_name']
+				'object_name' => $_POST['object_name']
 			);
 
 			update_option( 'page_widgets', $sidebars );
@@ -310,12 +359,12 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 		 * Return the concated string of the sidebar ID
 		 * 
 		 * @method get_sidebar_id
-		 * @param String $post_name
+		 * @param String $object_name
 		 * @param String $i
 		 * @return String ID of custom sidebar 
 		 */
-		private static function get_sidebar_id( $post_name, $i ) {
-			return self::WIDGET_ID_PREFIX . $post_name . '-' . $i;
+		private static function get_sidebar_id( $object_name, $i ) {
+			return self::WIDGET_ID_PREFIX . $object_name . '-' . $i;
 		}
 
 	}
