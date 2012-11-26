@@ -4,7 +4,7 @@ Donate link:
 Tags: widgets, sidebar
 Requires at least: 3.3
 Tested up to: 3.4
-Stable tag: .4
+Stable tag: .5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,10 @@ All active widgets appear in the center column and you can add new ones via drag
 1. Widget Interface
 
 == Changelog ==
+
+= 0.5 =
+* Updated documentation
+* Fixing JS error for undefined vars
 
 = 0.2 =
 * Updated documentation.

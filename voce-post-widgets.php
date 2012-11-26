@@ -4,8 +4,10 @@
   Plugin URI: https://github.com/voceconnect/voce-post-widgets
   Description: A better interface for managing your widgets.
   Author: johnciacia, markparolisi, voceplatforms
-  Version: 0.4
+  Version: 0.5
   Author URI: http://vocecommunications.com
+  License: GPLv2 or later
+  License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if ( !class_exists( 'Voce_Post_Widgets' ) ) {
