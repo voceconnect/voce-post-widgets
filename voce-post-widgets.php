@@ -4,7 +4,7 @@
   Plugin URI: https://github.com/voceconnect/voce-post-widgets
   Description: A better interface for managing your widgets.
   Author: johnciacia, markparolisi, voceplatforms
-  Version: 0.1
+  Version: 0.2
   Author URI: http://vocecommunications.com
  */
 
@@ -182,7 +182,7 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 		 * @return Void 
 		 */
 		public static function add_meta_boxes() {
-			$post_types = apply_filters( 'post_widgets_post_types', array( 'page' ) );
+			$post_types = apply_filters( 'voce_post_widgets_post_types', array( 'page' ) );
 
 			foreach ($post_types as $post_type) {
 				add_meta_box( 'sidebar_admin', 'Sidebar Admin', array( __CLASS__, 'sidebar_admin_metabox' ), $post_type, 'advanced', 'high' );
