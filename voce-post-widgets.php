@@ -204,7 +204,7 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 
 			<div id="widget-list" class="column-1">
 				<strong><?php _e( 'Available Widgets' ); ?></strong>
-				<p class="description"><?php _e( 'Drag widgets from here into the center to activate them.' ); ?></p>
+				<p class="description"><?php _e( 'Drag widgets from here to the right to activate them.' ); ?></p>
 				<?php wp_list_widgets(); ?>
 			</div>
 
