@@ -19,18 +19,17 @@
 			pageWidgets.sidebarWidgets = $.parseJSON(widgetsAdmin.sidebars_widgets.replace(/&quot;/g, '"'));
 
 			// @todo: update height as widgets are added / expanded
-			$('.sidebar').css('height', $('.column-1').height());
+			//$('.sidebar').css('height', $('.column-1').height());
 
 			if($('.column-2 .description').size() === 0) { 
 				$('.column-2 .sidebar').html('<p class="description">Widgets in this area will be shown in the sidebar on the ' + widgetsAdmin.post_name + ' page.</p>');
 			}
 
-			$first = $('.column-3 .widget :first');
-			$first.addClass('active');
-			pageWidgets.sidebar = $first.closest('.widget').attr('id');
-			pageWidgets.originalSidebar = $first.closest('.widget').attr('data-sidebar');
+			$first = $('.column-2 .sidebar-list :first');
+			pageWidgets.sidebar = $first.attr('id');
+			pageWidgets.originalSidebar = $first.attr('data-sidebar');
 
-			$('#sidebar_admin #widget-list, #sidebar_admin #sidebar-widget-list').children('.widget').draggable({
+			$('#sidebar_admin #widget-list').children('.widget').draggable({
 				connectToSortable: '.sidebar',
 				handle: '> .widget-top > .widget-title',
 				helper: 'clone',
@@ -142,20 +141,16 @@
 			* attributes, and make an AJAX request to get the active widgets for that 
 			* sidebar.
 			*/
-			$('.column-3 .widget-top').live('click', function(e) {
+			$('.column-2 .sidebar-list').live('change', function(e) {
 				e.preventDefault();
 				var a;
 
 				// Remove any widgets from the previous sidebar.
 				$('.column-2 .widget').remove();
 
-				// Set the sidebars active class
-				$('.column-3 .widget-top').removeClass('active');
-				$(this).addClass('active');
-
 				// Set the object attributes
-				pageWidgets.sidebar = $(this).parent().attr('id');
-				pageWidgets.originalSidebar = $(this).parent().attr('data-sidebar');
+				pageWidgets.sidebar = $(this).find(':selected').attr('id');
+				pageWidgets.originalSidebar = $(this).find(':selected').attr('data-sidebar');
 
 				// Get the active widgets for this sidebar
 				a = {
@@ -179,28 +174,28 @@
 			* When the save button of a sidebar is clicked, do an AJAX request
 			* and save the form data.
 			*/
-			$('.column-3 .widget-control-save').live('click', function(e) {
-				e.preventDefault();
-				var $widget, data, a;
-				$widget = $(this).closest('.widget');
-
-				data = $widget.find('.widget-inside :input').serialize();
-				$('.ajax-feedback', $widget).css('visibility', 'visible');
-
-				a = {
-					action: 'save-sidebar'
-				};
-
-				data += '&' + $.param(a);
-
-				$.post(
-					ajaxurl,
-					data,
-					function(data) {
-						$('.ajax-feedback').css('visibility', 'hidden');
-					}
-					);
-			});
+//			$('.column-3 .widget-control-save').live('click', function(e) {
+//				e.preventDefault();
+//				var $widget, data, a;
+//				$widget = $(this).closest('.widget');
+//
+//				data = $widget.find('.widget-inside :input').serialize();
+//				$('.ajax-feedback', $widget).css('visibility', 'visible');
+//
+//				a = {
+//					action: 'save-sidebar'
+//				};
+//
+//				data += '&' + $.param(a);
+//
+//				$.post(
+//					ajaxurl,
+//					data,
+//					function(data) {
+//						$('.ajax-feedback').css('visibility', 'hidden');
+//					}
+//					);
+//			});
 		},
 
 		/**

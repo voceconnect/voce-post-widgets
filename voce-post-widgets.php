@@ -209,16 +209,18 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 			</div>
 
 			<div class="column-2">
-				<strong><?php _e( 'Active Widgets' ); ?></strong>
-				<div class="sidebar widget-droppable widget-list" id="<?php echo $post->post_name; ?>_0">
-					<?php self::get_active_widgets( self::get_sidebar_id( $post->post_name, 0 ) ); ?>
+				<div class="column-2-sidebars">
+					<strong><?php _e( 'Available Sidebars' ); ?></strong>
+					<p class="description"><?php _e( 'Select a sidebar to edit.' ); ?></p>
+					<?php self::get_sidebars(); ?>
 				</div>
-			</div>
 
-			<div class="column-3">
-				<strong><?php _e( 'Available Sidebars' ); ?></strong>
-				<p class="description"><?php _e( 'Select a sidebar to edit.' ); ?></p>
-				<?php self::get_sidebars(); ?>
+				<div class="column-2-widgets">
+					<strong><?php _e( 'Active Widgets' ); ?></strong>
+					<div class="sidebar widget-droppable widget-list" id="<?php echo $post->post_name; ?>_0">
+						<?php self::get_active_widgets( self::get_sidebar_id( $post->post_name, 0 ) ); ?>
+					</div>
+				</div>
 			</div>
 
 			<?php wp_nonce_field( 'save-sidebar-widgets', '_wpnonce_widgets', false ); ?>
@@ -239,17 +241,36 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 			global $post, $wp_registered_sidebars;
 
 			$i = 0;
+
+			?><select class="sidebar-list"><?php 
+
 			foreach ($wp_registered_sidebars as $sidebar) {
 				// Ignore sidebars registered by this plugin.
-				if ( strpos( $sidebar['id'], self::WIDGET_ID_PREFIX ) === 0 )
+				if ( strpos( $sidebar['id'], self::WIDGET_ID_PREFIX ) === 0 ) {
 					continue;
-				?>
-				<div class="widget" id="<?php echo self::get_sidebar_id( $post->post_name, $i ); ?>" data-sidebar="<?php echo $sidebar['id']; ?>">
+				}
+
+				?><option id="<?php echo self::get_sidebar_id( $post->post_name, $i ); ?>" data-sidebar="<?php echo $sidebar['id']; ?>"><?php echo $sidebar['name']; ?></option><?php
+				$i++;
+			}
+
+			?></select><?php 
+		}
+//		public static function get_sidebars() {
+//			global $post, $wp_registered_sidebars;
+//
+//			$i = 0;
+//			foreach ($wp_registered_sidebars as $sidebar) {
+//				// Ignore sidebars registered by this plugin.
+//				if ( strpos( $sidebar['id'], self::WIDGET_ID_PREFIX ) === 0 )
+//					continue;
+/*				?>
+				<div class="widget" id="//<?php echo self::get_sidebar_id( $post->post_name, $i ); ?>" data-sidebar="<?php echo $sidebar['id']; ?>">
 					<div class="widget-top">
 						<div class="widget-title-action">
 							<a class="widget-action hide-if-no-js" href="#available-widgets"></a>
 						</div>
-						<div class="widget-title"><h4><?php echo $sidebar['name']; ?></h4></div>
+						<div class="widget-title"><h4>//<?php echo $sidebar['name']; ?></h4></div>
 					</div>
 
 					<div class="widget-inside">
@@ -260,17 +281,17 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 							</div>
 
 							<div class="alignright">
-								<img src="<?php echo admin_url(); ?>images/wpspin_light.gif" class="ajax-feedback" title="" alt="">
+								<img src="//<?php echo admin_url(); ?>images/wpspin_light.gif" class="ajax-feedback" title="" alt="">
 								<input type="submit" name="savewidget" class="button-primary widget-control-save" value="Save">
 							</div>
 							<br class="clear">
 						</div>
 					</div>
 				</div>
-				<?php
-				$i++;
-			}
-		}
+*/				//<?php
+//				$i++;
+//			}
+//		}
 
 		/**
 		 * AJAX handler to retreive active widets
