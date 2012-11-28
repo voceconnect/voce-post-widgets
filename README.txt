@@ -43,9 +43,10 @@ Filters to set the default arguments for the sidebar:
 Admin UI:
 
 The first column shows all available widgets.
-The last column shows all of the registered sidebars.
-To add/edit/delete widgets in a sidebar, click on the sidebar name in the last (right) column.
-All active widgets appear in the center column and you can add new ones via drag and drop from the first (left) column and edit them as you normally would in the widgets screen by opening their options with a click on the widget name. 
+The second column shows all of the registered sidebars as a dropdown then that sidebar's active widgets.
+To add/edit/delete widgets in a sidebar, select a sidebar name in the dropdown. All active widgets appear in below
+and you can add new ones via drag and drop from the first (left) column and edit them as you normally would in the
+widgets screen by opening their options with a click on the widget name. 
 
 == Frequently asked questions ==
 
