@@ -32,7 +32,9 @@
 			$('#sidebar_admin #widget-list').children('.widget').draggable({
 				connectToSortable: '.sidebar',
 				handle: '> .widget-top > .widget-title',
-				helper: 'clone',
+				helper: function() {
+					return $(this).clone().css( 'width', $(this).css('width') );
+				},
 				zIndex: 5,
 				containment: '#sidebar_admin',
 				start : function(e, ui) {
