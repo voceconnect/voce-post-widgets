@@ -4,7 +4,7 @@
   Plugin URI: https://github.com/voceconnect/voce-post-widgets
   Description: A better interface for managing your widgets.
   Author: johnciacia, markparolisi, voceplatforms
-  Version: 0.5
+  Version: 1.0
   Author URI: http://vocecommunications.com
   License: GPLv2 or later
   License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -256,42 +256,6 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 
 			?></select><?php 
 		}
-//		public static function get_sidebars() {
-//			global $post, $wp_registered_sidebars;
-//
-//			$i = 0;
-//			foreach ($wp_registered_sidebars as $sidebar) {
-//				// Ignore sidebars registered by this plugin.
-//				if ( strpos( $sidebar['id'], self::WIDGET_ID_PREFIX ) === 0 )
-//					continue;
-/*				?>
-				<div class="widget" id="//<?php echo self::get_sidebar_id( $post->post_name, $i ); ?>" data-sidebar="<?php echo $sidebar['id']; ?>">
-					<div class="widget-top">
-						<div class="widget-title-action">
-							<a class="widget-action hide-if-no-js" href="#available-widgets"></a>
-						</div>
-						<div class="widget-title"><h4>//<?php echo $sidebar['name']; ?></h4></div>
-					</div>
-
-					<div class="widget-inside">
-						<div class="widget-control-actions">
-							<div class="alignleft">
-								<a class="widget-control-remove" href="#remove">Delete</a> |
-								<a class="widget-control-close" href="#close">Close</a>
-							</div>
-
-							<div class="alignright">
-								<img src="//<?php echo admin_url(); ?>images/wpspin_light.gif" class="ajax-feedback" title="" alt="">
-								<input type="submit" name="savewidget" class="button-primary widget-control-save" value="Save">
-							</div>
-							<br class="clear">
-						</div>
-					</div>
-				</div>
-*/				//<?php
-//				$i++;
-//			}
-//		}
 
 		/**
 		 * AJAX handler to retreive active widets
