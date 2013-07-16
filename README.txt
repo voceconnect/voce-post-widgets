@@ -1,10 +1,9 @@
 === Voce Post Widgets ===
-Contributors: johnciacia, markparolisi, voceplatforms
-Donate link: 
+Contributors: johnciacia, markparolisi, banderon, voceplatforms
 Tags: widgets, sidebar
 Requires at least: 3.3
 Tested up to: 3.4
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,8 +26,7 @@ Minimum requirements:
 Instructions:
 
 1. Upload the `voce-post-widgets` directory to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
+2. Activate the plugin through the 'Plugins' menu in WordPress
 
 Usage: 
 By default, the Pages post type has the widget UI enabled. You can add custom post types by using the filter `voce_post_widgets_post_types`.
@@ -55,6 +53,10 @@ widgets screen by opening their options with a click on the widget name.
 1. Widget Interface
 
 == Changelog ==
+
+= 1.1 =
+* Fixed bugs for post names containing numbers
+* Added check for empty sidebar before attempting assignment
 
 = 1.0 =
 * Updated UI for metabox
