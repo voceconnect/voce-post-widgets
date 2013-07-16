@@ -53,18 +53,21 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 		 */
 		public static function sidebars_widgets( $sidebars_widgets ) {
 			global $post;
-			if ( $post == NULL ) {
+			if ( empty( $post ) ) {
 				return $sidebars_widgets;
 			}
-			$sidebars = get_option( 'page_widgets', array( ) );
-			if ( $sidebars == "" ) {
+
+			$sidebars = get_option( 'page_widgets', array() );
+			if ( empty( $sidebars ) ) {
 				return $sidebars_widgets;
 			}
+
 			$widgets = $sidebars_widgets;
 
+			$pattern = str_replace( '-', '\-', '/' . self::WIDGET_ID_PREFIX . $post->post_name . '-\d+/' );
 			foreach ($sidebars as $sidebar => $attrs) {
-				if ( strpos( $sidebar, self::WIDGET_ID_PREFIX . $post->post_name ) === 0 ) {
-					$widgets[$attrs['original_sidebar']] = $sidebars_widgets[$sidebar];
+				if ( preg_match( $pattern, $sidebar ) && ! empty( $sidebars_widgets[ $sidebar ] ) ) {
+					$widgets[ $attrs['original_sidebar'] ] = $sidebars_widgets[ $sidebar ];
 				}
 			}
 
