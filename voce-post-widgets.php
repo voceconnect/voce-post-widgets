@@ -64,7 +64,7 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 
 			$widgets = $sidebars_widgets;
 
-			$pattern = str_replace( '-', '\-', '/' . self::WIDGET_ID_PREFIX . $post->post_name . '-\d+/' );
+			$pattern = str_replace( '-', '\-', '/^' . self::WIDGET_ID_PREFIX . $post->post_name . '-\d+$/' );
 			foreach ($sidebars as $sidebar => $attrs) {
 				if ( preg_match( $pattern, $sidebar ) && ! empty( $sidebars_widgets[ $sidebar ] ) ) {
 					$widgets[ $attrs['original_sidebar'] ] = $sidebars_widgets[ $sidebar ];
