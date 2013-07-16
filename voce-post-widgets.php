@@ -3,8 +3,8 @@
   Plugin Name: Voce Post Widgets
   Plugin URI: https://github.com/voceconnect/voce-post-widgets
   Description: A better interface for managing your widgets.
-  Author: johnciacia, markparolisi, voceplatforms
-  Version: 1.0
+  Author: johnciacia, markparolisi, banderon, voceplatforms
+  Version: 1.1
   Author URI: http://vocecommunications.com
   License: GPLv2 or later
   License URI: http://www.gnu.org/licenses/gpl-2.0.html
