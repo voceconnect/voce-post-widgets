@@ -63,7 +63,7 @@
 				stop: function(e, ui) {
 
 					var add = ui.item.find('input.add_new').val(),
-					n = ui.item.find('input.multi_number').val(),
+					n = parseInt(ui.item.find('input.multi_number').val()),
 					id = the_id;
 
 					ui.item.css({
