@@ -22,7 +22,9 @@
 			//$('.sidebar').css('height', $('.column-1').height());
 
 
+			if($('.column-2 .description').size() === 0) { 
 				$('.column-2 .sidebar').html('<p class="description">Widgets in this area will be shown in the sidebar on the ' + decodeURIComponent(widgetsAdmin.post_name) + ' page.</p>');
+			}
 
 
 			$first = $('.column-2 .sidebar-list :first');
