@@ -8,7 +8,7 @@
 		sidebarWidgets: {},
 		sidebar: '',
 		originalSidebar: '',
-		
+
 		/**
 		* Handle all of the events
 		* @method init
@@ -21,7 +21,7 @@
 			// @todo: update height as widgets are added / expanded
 			//$('.sidebar').css('height', $('.column-1').height());
 
-			if($('.column-2 .description').size() === 0) { 
+			if($('.column-2 .description').size() === 0) {
 				$('.column-2 .sidebar').html('<p class="description">Widgets in this area will be shown in the sidebar on the ' + widgetsAdmin.post_name + ' page.</p>');
 			}
 
@@ -63,11 +63,11 @@
 				stop: function(e, ui) {
 
 					var add = ui.item.find('input.add_new').val(),
-					n = ui.item.find('input.multi_number').val(),
+					n = parseInt(ui.item.find('input.multi_number').val()),
 					id = the_id;
 
 					ui.item.css({
-						margin:'', 
+						margin:'',
 						'width':''
 					});
 					the_id = '';
@@ -140,7 +140,7 @@
 
 			/**
 			* When a sidebar is clicked set this objects sidebar and originalSidebar
-			* attributes, and make an AJAX request to get the active widgets for that 
+			* attributes, and make an AJAX request to get the active widgets for that
 			* sidebar.
 			*/
 			$('.column-2 .sidebar-list').live('change', function(e) {
@@ -165,7 +165,7 @@
 					a,
 					function(data) {
 						$('.column-2 .sidebar').html(data);
-						if($('.column-2 .description').size() === 0) { 
+						if($('.column-2 .description').size() === 0) {
 							$('.column-2 .sidebar').html('<p class="description">Widgets in this area will be shown in the sidebar on the ' + widgetsAdmin.post_name + ' page.</p>');
 						}
 					}
@@ -233,7 +233,7 @@
 				a.delete_widget = 1;
 			}
 			data += '&' + $.param(a);
-		
+
 			$.post(
 				ajaxurl,
 				data,
@@ -246,7 +246,7 @@
 				pageWidgets.saveOrder();
 			}
 		},
-		
+
 		/**
 		* When calling the widgets-order AJAX action, you must post
 		* ALL of the sidebars and widgets, not just the one(s) you are
@@ -255,7 +255,7 @@
 		*/
 		saveOrder : function saveOrder() {
 			var a, sidebar;
-		
+
 			a = {
 				action: 'widgets-order',
 				savewidgets: $('#_wpnonce_widgets').val()
@@ -272,20 +272,20 @@
 			a['sidebars[' + pageWidgets.sidebar + ']'] = $($('.column-2 div.ui-sortable')).sortable('toArray').join(',');
 
 			$.post(
-				ajaxurl, 
-				a, 
+				ajaxurl,
+				a,
 				function(data) {
 				}
 				);
 		},
-		
+
 		/**
 		 * @method close
 		 */
 		close : function close(widget) {
 			widget.children('.widget-inside').slideUp('fast', function(){
 				widget.css({
-					'width':'', 
+					'width':'',
 					margin:''
 				});
 			});
