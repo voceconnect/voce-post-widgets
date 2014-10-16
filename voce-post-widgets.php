@@ -89,7 +89,7 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 				return;
 
 			$args = array(
-				'description' => 'Widgets in this area will be shown in the sidebar on the %1 page.',
+				'description' => 'Widgets in this area will be shown in the sidebar on the ' . urldecode('%1') . ' page.',
 				'before_widget' => '<li id="%1$s" class="widget %2$s">',
 				'after_widget' => '</li>',
 				'before_title' => '<h2 class="widgettitle">',
@@ -107,9 +107,9 @@ if ( !class_exists( 'Voce_Post_Widgets' ) ) {
 
 
 				register_sidebar( array(
-					'name' => $attrs['post_name'] . ' [' . $attrs['original_sidebar'] . ']',
-					'id' => $sidebar,
-					'description' => __( str_replace( '%1', $attrs['post_name'], $args['description'] ) ),
+					'name' => urldecode($attrs['post_name']) . ' [' . $attrs['original_sidebar'] . ']',
+					'id' => urldecode( $sidebar ),
+					'description' => __( str_replace( '%1', urldecode( $attrs['post_name'] ), $args['description'] ) ),
 					'before_title' => $args['before_title'],
 					'after_title' => $args['after_title'],
 					'before_widget' => $args['before_widget'],
